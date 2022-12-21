@@ -25,7 +25,7 @@
 ## 💻 Pre Requirements
 
 Before starting, verify if you meet the requirements:
-* You have installed the most recent version of `<Laravel / Laragon>`.
+* You have installed the most recent version of `<Laravel / Laragon / Composer / Node>`.
 * You have a machine with `<Windows / Linux / Mac>` operational system.
 
 
@@ -33,6 +33,9 @@ Before starting, verify if you meet the requirements:
 
 ```sh
 npm install
+```
+```sh
+composer install
 ```
 
 ## 📁 Creating Database
@@ -42,7 +45,7 @@ php artisan migrate
 ```
 
 
-## 🔒 Laravel Passport
-In order to run the full application, make sure you have the [LARAVEL PASSPORT](https://laravel.com/docs/9.x/passport) configured and running
+## 🔒 Composer
+In order to run the full application, make sure you have the [COMPOSER](https://getcomposer.org/) configured and running
 
 [⬆ Back to the top](#todo-laravel)<br>
