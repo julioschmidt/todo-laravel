@@ -7,8 +7,6 @@
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/julioschmidt/todo-laravel?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/julioschmidt/todo-laravel?style=for-the-badge)
 
-![preview](./.github/preview.png)
-
 > Todo App back-end made in partnership with STW using Laravel with the purpose of learning new technologies.
 
 ## ⚙️ Technologies
