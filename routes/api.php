@@ -16,19 +16,28 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+
+Route::middleware('auth:sanctum')->group(function() {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::get('/todos', 'App\Http\Controllers\TodosController@index'); //pode ser feito com Route::get('/users/{id}/todos', 'App\Http\Controllers\TodosController@index'); para N:N
+    Route::post('/todos', 'App\Http\Controllers\TodosController@store');
+    Route::patch('/todos/{todo}', 'App\Http\Controllers\TodosController@update');
+    Route::patch('/todosCheckAll', 'App\Http\Controllers\TodosController@updateAll');
+    Route::delete('/todos/{todo}', 'App\Http\Controllers\TodosController@destroy');
+    Route::delete('/todosDeleteCompleted', 'App\Http\Controllers\TodosController@destroyCompleted');
+
+    Route::post('logout', [LoginController::class, 'logout']);
 });
-
-
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
-Route::middleware('auth:sanctum')->post('logout', [LoginController::class, 'logout']);
-/* Route::post('/login', 'App\Http\Controllers\AuthController@login'); */
-Route::get('/todos', 'App\Http\Controllers\TodosController@index');
-Route::post('/todos', 'App\Http\Controllers\TodosController@store');
-Route::patch('/todos/{todo}', 'App\Http\Controllers\TodosController@update');
-Route::patch('/todosCheckAll', 'App\Http\Controllers\TodosController@updateAll');
-Route::delete('/todos/{todo}', 'App\Http\Controllers\TodosController@destroy');
-Route::delete('/todosDeleteCompleted', 'App\Http\Controllers\TodosController@destroyCompleted');
+
+
+
+
+
+

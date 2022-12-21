@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('todos', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                  ->references('id')->on('users')
+                  ->onDelete('cascade');
             $table->text('title');
             $table->boolean('completed')->deafult(false);
             $table->timestamps();

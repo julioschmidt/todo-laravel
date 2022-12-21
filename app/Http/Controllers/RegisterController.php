@@ -9,20 +9,19 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
-    public function register(Request $request, User $user)
+    public function register(Request $request)
     {
-        $userData = $request->only('name', 'email', 'password');
-        $userData['password'] = bcrypt($userData['password']);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
+        ]);
 
-        if(!$user = $user->create($userData))
-            abort(500, 'Error creating a new user');
-
-        return response()
-                    ->json([
-                        'data' => [
-                            'user' => $user
-                        ]
-                        ]);
+        return User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
     }
 
     /* public function login(Request $request)

@@ -15,7 +15,7 @@ class TodosController extends Controller
      */
     public function index()
     {
-        return Todo::all();
+        return Todo::where('user_id', auth()->user()->id)->get();
     }
 
 
@@ -32,7 +32,11 @@ class TodosController extends Controller
             'completed' => 'required|boolean'
         ]);
 
-        $todo = Todo::create($data);
+        $todo = Todo::create([
+            'user_id' => auth()->user()->id,
+            'title' => $request->title,
+            'completed' => $request->completed,
+        ]);
 
         return response($todo, 201);
     }
@@ -47,6 +51,11 @@ class TodosController extends Controller
      */
     public function update(UpdateTodoRequest $request, Todo $todo)
     {
+        if ($todo->user_id !== auth()->user()->id)
+        {
+            return response()->json('Unauthorized', 401);
+        }
+
         $data = $request->validate([
             'title' => 'required|string',
             'completed' => 'required|boolean'
@@ -63,7 +72,7 @@ class TodosController extends Controller
             'completed' => 'required|boolean',
         ]);
 
-        Todo::query()->update($data);
+        Todo::where('user_id', auth()->user()->id)->update($data);
 
         return response('Updated', 200);
     }
@@ -76,6 +85,11 @@ class TodosController extends Controller
      */
     public function destroy(Todo $todo)
     {
+        if ($todo->user_id !== auth()->user()->id)
+        {
+            return response()->json('Unauthorized', 401);
+        }
+
         $todo->delete();
 
         return response('Deleted todo item', 200);
@@ -83,12 +97,27 @@ class TodosController extends Controller
 
     public function destroyCompleted(UpdateTodoRequest $request)
     {
+
+        $todosToDelete = $request->todos;
+
+        $userTodosId = auth()->user()->todos->map(function($todo) {
+            return $todo->id;
+        });
+
+        $isValid = collect($todosToDelete)->every(function($value, $key) use ($userTodosId) {
+            return $userTodosId->contains($value);
+        });
+
+        if(!$isValid) {
+            return response()->json('Unauthorized', 401);
+        }
+
         $request->validate([
             'todos' => 'required|array',
         ]);
 
         Todo::destroy($request->todos);
 
-        return response('Deleted', 200);
+        return response()->json('Deleted', 200);
     }
 }
